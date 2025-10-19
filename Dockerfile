@@ -2,8 +2,15 @@ FROM node:lts-alpine
 
 RUN apk add --no-cache bash
 
+
 RUN npm install -g @nestjs/cli
+
+WORKDIR /home/node/app
+
+COPY package*.json ./
+RUN npm install
+COPY . .
 
 USER node
 
-WORKDIR /home/node/app
+CMD ["npm", "run", "start:dev"]
