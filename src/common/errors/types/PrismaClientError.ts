@@ -1,5 +1,5 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
-export type PrismaClientError = PrismaClientKnownRequestError & {
+export type PrismaClientError = Prisma.PrismaClientKnownRequestError & {
   meta?: { target: string };
 };

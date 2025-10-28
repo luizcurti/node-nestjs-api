@@ -46,6 +46,7 @@ describe('PostsRepository', () => {
         content: 'Content',
         authorEmail: 'author@test.com',
       };
+      const authorEmail = dto.authorEmail;
       const post: PostEntity = {
         id: 1,
         title: dto.title,
@@ -58,14 +59,14 @@ describe('PostsRepository', () => {
 
       mockPrisma.user.findUnique.mockResolvedValue({
         id: 1,
-        email: dto.authorEmail,
+        email: authorEmail,
       });
       mockPrisma.post.create.mockResolvedValue(post);
 
       const result = await repository.create(dto);
       expect(result).toEqual(post);
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
-        where: { email: dto.authorEmail },
+        where: { email: authorEmail },
       });
       expect(mockPrisma.post.create).toHaveBeenCalled();
     });
@@ -128,8 +129,34 @@ describe('PostsRepository', () => {
   });
 
   describe('update', () => {
+    it('should update post when authorEmail is not provided', async () => {
+      const dto: UpdatePostDto = {
+        title: 'Updated Title',
+      };
+      const post: PostEntity = {
+        id: 1,
+        title: dto.title,
+        content: 'Content',
+        authorId: 1,
+        published: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      mockPrisma.post.update.mockResolvedValue(post);
+
+      const result = await repository.update(1, dto);
+      expect(result).toEqual(post);
+      expect(mockPrisma.post.update).toHaveBeenCalledWith({
+        data: dto,
+        where: { id: 1 },
+      });
+    });
     it('should update post without changing author', async () => {
-      const dto: UpdatePostDto = { title: 'Updated Title', authorEmail: 'author@test.com' };
+      const dto: UpdatePostDto = {
+        title: 'Updated Title',
+        authorEmail: 'author@test.com',
+      };
+      const authorEmail = dto.authorEmail;
       const post: PostEntity = {
         id: 1,
         title: dto.title,
@@ -141,14 +168,14 @@ describe('PostsRepository', () => {
       };
       mockPrisma.user.findUnique.mockResolvedValue({
         id: 1,
-        email: dto.authorEmail,
+        email: authorEmail,
       });
       mockPrisma.post.update.mockResolvedValue(post);
 
       const result = await repository.update(1, dto);
       expect(result).toEqual(post);
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
-        where: { email: dto.authorEmail },
+        where: { email: authorEmail },
       });
       expect(mockPrisma.post.update).toHaveBeenCalled();
     });
@@ -158,6 +185,7 @@ describe('PostsRepository', () => {
         title: 'Updated Title',
         authorEmail: 'author@test.com',
       };
+      const authorEmail = dto.authorEmail;
       const post: PostEntity = {
         id: 1,
         title: dto.title,
@@ -170,14 +198,14 @@ describe('PostsRepository', () => {
 
       mockPrisma.user.findUnique.mockResolvedValue({
         id: 1,
-        email: dto.authorEmail,
+        email: authorEmail,
       });
       mockPrisma.post.update.mockResolvedValue(post);
 
       const result = await repository.update(1, dto);
       expect(result).toEqual(post);
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
-        where: { email: dto.authorEmail },
+        where: { email: authorEmail },
       });
       expect(mockPrisma.post.update).toHaveBeenCalled();
     });

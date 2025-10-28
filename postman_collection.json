@@ -1,0 +1,76 @@
+{
+  "info": {
+    "_postman_id": "b1e7e1e0-1234-4cde-9abc-123456789abc",
+    "name": "API Prisma Example",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleção de exemplo para testar a API Prisma/NestJS."
+  },
+  "item": [
+    {
+      "name": "Criar usuário",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Usuário Teste\",\n  \"email\": \"usuario@teste.com\",\n  \"admin\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["users"]
+        }
+      }
+    },
+    {
+      "name": "Listar usuários",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["users"]
+        }
+      }
+    },
+    {
+      "name": "Criar post",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Título do post\",\n  \"content\": \"Conteúdo do post\",\n  \"authorEmail\": \"usuario@teste.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["posts"]
+        }
+      }
+    },
+    {
+      "name": "Listar posts",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["posts"]
+        }
+      }
+    }
+  ]
+}
