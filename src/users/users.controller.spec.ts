@@ -122,7 +122,7 @@ describe('UsersController', () => {
 
   it('should handle NotFoundError from service', async () => {
     mockUsersService.findOne.mockRejectedValue(
-      new NotFoundError('Usuario nao encontrado.'),
+      new NotFoundError('User not found.'),
     );
 
     await expect(controller.findOne('999')).rejects.toThrow(NotFoundError);

@@ -2,17 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostDto {
-  @ApiProperty({ description: 'Título do post' })
+  @ApiProperty({ description: 'Post title' })
   @IsString()
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ description: 'Conteúdo do post' })
+  @ApiProperty({ description: 'Post content' })
   @IsString()
   @IsOptional()
   content?: string;
 
-  @ApiProperty({ description: 'Email do autor do post' })
+  @ApiProperty({ description: 'Author email' })
   @IsEmail()
   authorEmail: string;
 }

@@ -14,7 +14,7 @@ export class UsersService {
   }
 
   findAll() {
-    //throw new UnauthorizedError('Nao autorizado.');
+    // throw new UnauthorizedError('Not authorized.');
     return this.repository.findAll();
   }
 
@@ -22,7 +22,7 @@ export class UsersService {
     const user = await this.repository.findOne(id);
 
     if (!user) {
-      throw new NotFoundError('Usuario nao encontrado.');
+      throw new NotFoundError('User not found.');
     }
 
     return user;
