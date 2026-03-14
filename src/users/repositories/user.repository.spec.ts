@@ -127,6 +127,9 @@ describe('UsersRepository', () => {
 
     const result = await repository.remove(1);
     expect(result).toEqual(deletedUser);
-    expect(prisma.user.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(prisma.user.delete).toHaveBeenCalledWith({
+      where: { id: 1 },
+      include: { posts: { select: { title: true, createdAt: true } } },
+    });
   });
 });

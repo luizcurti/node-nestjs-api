@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash postgresql-client
 
 
 RUN npm install -g @nestjs/cli

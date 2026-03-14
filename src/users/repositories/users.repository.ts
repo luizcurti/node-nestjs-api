@@ -73,6 +73,14 @@ export class UsersRepository {
       where: {
         id,
       },
+      include: {
+        posts: {
+          select: {
+            title: true,
+            createdAt: true,
+          },
+        },
+      },
     });
   }
 }

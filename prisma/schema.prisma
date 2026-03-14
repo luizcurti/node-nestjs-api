@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -27,9 +28,9 @@ model Post {
   title     String   @db.VarChar(255)
   content   String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
 
   @@map("post")
 }

@@ -12,9 +12,7 @@ export class PostsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPostDto: CreatePostDto): Promise<PostEntity> {
-    const { authorEmail } = createPostDto;
-
-    delete createPostDto.authorEmail;
+    const { authorEmail, ...postData } = createPostDto;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -27,7 +25,7 @@ export class PostsRepository {
     }
 
     const data: Prisma.PostCreateInput = {
-      ...createPostDto,
+      ...postData,
       author: {
         connect: {
           email: authorEmail,
@@ -69,16 +67,14 @@ export class PostsRepository {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto): Promise<PostEntity> {
-    const { authorEmail } = updatePostDto;
+    const { authorEmail, ...postData } = updatePostDto;
 
     if (!authorEmail) {
       return this.prisma.post.update({
-        data: updatePostDto,
+        data: postData,
         where: { id },
       });
     }
-
-    delete updatePostDto.authorEmail;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -91,7 +87,7 @@ export class PostsRepository {
     }
 
     const data: Prisma.PostUpdateInput = {
-      ...updatePostDto,
+      ...postData,
       author: {
         connect: {
           email: authorEmail,

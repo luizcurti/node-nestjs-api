@@ -8,6 +8,8 @@ services:
       - "5555:5555"
     volumes:
       - .:/home/node/app
+    environment:
+      DATABASE_URL: postgresql://postgres:docker@db:5432/prismaapi
     depends_on:
       - db
 

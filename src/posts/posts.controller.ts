@@ -17,31 +17,31 @@ import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Get()
   findAll() {
     return this.postsService.findAll();
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);

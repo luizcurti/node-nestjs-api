@@ -17,32 +17,32 @@ import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiResponse({ status: 409, description: 'Conflito de email' })
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiResponse({ status: 409, description: 'Email already in use.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @ApiForbiddenResponse({ description: 'Acesso negado.' })
+  @ApiForbiddenResponse({ description: 'Access denied.' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

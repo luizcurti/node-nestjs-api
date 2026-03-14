@@ -27,10 +27,12 @@ async function bootstrap() {
     }),
   );
   //app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new ConflictInterceptor());
-  app.useGlobalInterceptors(new DatabaseInterceptor());
-  app.useGlobalInterceptors(new UnauthorizedInterceptor());
-  app.useGlobalInterceptors(new NotFoundInterceptor());
+  app.useGlobalInterceptors(
+    new NotFoundInterceptor(),
+    new UnauthorizedInterceptor(),
+    new ConflictInterceptor(),
+    new DatabaseInterceptor(),
+  );
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

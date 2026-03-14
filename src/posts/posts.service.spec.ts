@@ -3,6 +3,7 @@ import { PostsService } from './posts.service';
 import { PostsRepository } from './repositories/posts.repository';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { NotFoundError } from 'src/common/errors/types/NotFoundError';
 
 describe('PostsService', () => {
   let service: PostsService;
@@ -59,6 +60,12 @@ describe('PostsService', () => {
     repository.findOne.mockResolvedValue(result as any);
     await expect(service.findOne(1)).resolves.toBe(result);
     expect(repository.findOne).toHaveBeenCalledWith(1);
+  });
+
+  it('should throw NotFoundError if post does not exist', async () => {
+    repository.findOne.mockResolvedValue(null);
+    await expect(service.findOne(999)).rejects.toThrow(NotFoundError);
+    expect(repository.findOne).toHaveBeenCalledWith(999);
   });
 
   it('should call repository.update on update', async () => {
