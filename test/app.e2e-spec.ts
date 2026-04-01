@@ -49,7 +49,7 @@ describe('Users CRUD (e2e)', () => {
 
   // ─── CREATE ───────────────────────────────────────────────────────────────
 
-  it('POST /users → 201 ao criar usuário válido', async () => {
+  it('POST /users → 201 creates a valid user', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'Test User', email: 'user@test.com', admin: false })
@@ -65,7 +65,7 @@ describe('Users CRUD (e2e)', () => {
     createdUserId = res.body.id;
   });
 
-  it('POST /users → 201 sem campo admin (deve usar default false)', async () => {
+  it('POST /users → 201 without admin field uses default false', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'No Admin Field', email: 'noadmin@test.com' })
@@ -76,7 +76,7 @@ describe('Users CRUD (e2e)', () => {
     await prisma.user.delete({ where: { id: res.body.id } });
   });
 
-  it('POST /users → 409 ao criar usuário com email duplicado', async () => {
+  it('POST /users → 409 when email is already in use', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'Duplicate', email: 'user@test.com', admin: false })
@@ -85,7 +85,7 @@ describe('Users CRUD (e2e)', () => {
     expect(res.body.message).toBeDefined();
   });
 
-  it('POST /users → 400 ao criar usuário sem email', async () => {
+  it('POST /users → 400 when email is missing', async () => {
     const res = await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'No Email', admin: false })
@@ -94,21 +94,21 @@ describe('Users CRUD (e2e)', () => {
     expect(res.body.message).toBeDefined();
   });
 
-  it('POST /users → 400 ao criar usuário com email inválido', async () => {
+  it('POST /users → 400 when email is invalid', async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'Bad Email', email: 'not-an-email', admin: false })
       .expect(400);
   });
 
-  it('POST /users → 400 ao criar usuário sem nome', async () => {
+  it('POST /users → 400 when name is missing', async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({ email: 'noname@test.com', admin: false })
       .expect(400);
   });
 
-  it('POST /users → 400 com campo extra (forbidNonWhitelisted)', async () => {
+  it('POST /users → 400 with unknown field (forbidNonWhitelisted)', async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({
@@ -122,7 +122,7 @@ describe('Users CRUD (e2e)', () => {
 
   // ─── LIST ─────────────────────────────────────────────────────────────────
 
-  it('GET /users → 200 retorna lista de usuários', async () => {
+  it('GET /users → 200 returns a list of users', async () => {
     const res = await request(app.getHttpServer()).get('/users').expect(200);
 
     expect(Array.isArray(res.body)).toBe(true);
@@ -132,7 +132,7 @@ describe('Users CRUD (e2e)', () => {
 
   // ─── FIND ONE ─────────────────────────────────────────────────────────────
 
-  it('GET /users/:id → 200 retorna usuário por id', async () => {
+  it('GET /users/:id → 200 returns a user by id', async () => {
     const res = await request(app.getHttpServer())
       .get(`/users/${createdUserId}`)
       .expect(200);
@@ -143,7 +143,7 @@ describe('Users CRUD (e2e)', () => {
     });
   });
 
-  it('GET /users/:id → 404 para id inexistente', async () => {
+  it('GET /users/:id → 404 when user does not exist', async () => {
     const res = await request(app.getHttpServer())
       .get('/users/999999')
       .expect(404);
@@ -151,13 +151,13 @@ describe('Users CRUD (e2e)', () => {
     expect(res.body.message).toBeDefined();
   });
 
-  it('GET /users/:id → 400 para id não-numérico', async () => {
+  it('GET /users/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer()).get('/users/abc').expect(400);
   });
 
   // ─── UPDATE ───────────────────────────────────────────────────────────────
 
-  it('PATCH /users/:id → 200 atualiza nome do usuário', async () => {
+  it('PATCH /users/:id → 200 updates user name', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/users/${createdUserId}`)
       .send({ name: 'Updated Name' })
@@ -167,14 +167,14 @@ describe('Users CRUD (e2e)', () => {
     expect(res.body.email).toBe('user@test.com');
   });
 
-  it('PATCH /users/:id → 404 para id inexistente', async () => {
+  it('PATCH /users/:id → 404 when user does not exist', async () => {
     await request(app.getHttpServer())
       .patch('/users/999999')
       .send({ name: 'Ghost' })
       .expect(404);
   });
 
-  it('PATCH /users/:id → 400 para id não-numérico', async () => {
+  it('PATCH /users/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer())
       .patch('/users/abc')
       .send({ name: 'X' })
@@ -183,7 +183,7 @@ describe('Users CRUD (e2e)', () => {
 
   // ─── DELETE ───────────────────────────────────────────────────────────────
 
-  it('DELETE /users/:id → 200 remove o usuário', async () => {
+  it('DELETE /users/:id → 200 removes the user', async () => {
     const res = await request(app.getHttpServer())
       .delete(`/users/${createdUserId}`)
       .expect(200);
@@ -191,13 +191,11 @@ describe('Users CRUD (e2e)', () => {
     expect(res.body.id).toBe(createdUserId);
   });
 
-  it('DELETE /users/:id → 404 para id inexistente', async () => {
-    await request(app.getHttpServer())
-      .delete('/users/999999')
-      .expect(404);
+  it('DELETE /users/:id → 404 when user does not exist', async () => {
+    await request(app.getHttpServer()).delete('/users/999999').expect(404);
   });
 
-  it('DELETE /users/:id → 400 para id não-numérico', async () => {
+  it('DELETE /users/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer()).delete('/users/abc').expect(400);
   });
 });
@@ -249,7 +247,7 @@ describe('Posts CRUD (e2e)', () => {
 
   // ─── CREATE ───────────────────────────────────────────────────────────────
 
-  it('POST /posts → 201 ao criar post válido', async () => {
+  it('POST /posts → 201 creates a valid post', async () => {
     const res = await request(app.getHttpServer())
       .post('/posts')
       .send({
@@ -269,7 +267,7 @@ describe('Posts CRUD (e2e)', () => {
     createdPostId = res.body.id;
   });
 
-  it('POST /posts → 201 ao criar post sem content (opcional)', async () => {
+  it('POST /posts → 201 without content field (optional)', async () => {
     const res = await request(app.getHttpServer())
       .post('/posts')
       .send({ title: 'No Content', authorEmail: 'author@posts.com' })
@@ -279,7 +277,7 @@ describe('Posts CRUD (e2e)', () => {
     await prisma.post.delete({ where: { id: res.body.id } });
   });
 
-  it('POST /posts → 404 ao criar post com autor inexistente', async () => {
+  it('POST /posts → 404 when author does not exist', async () => {
     const res = await request(app.getHttpServer())
       .post('/posts')
       .send({
@@ -291,21 +289,21 @@ describe('Posts CRUD (e2e)', () => {
     expect(res.body.message).toBeDefined();
   });
 
-  it('POST /posts → 400 ao criar post sem título', async () => {
+  it('POST /posts → 400 when title is missing', async () => {
     await request(app.getHttpServer())
       .post('/posts')
       .send({ content: 'No title', authorEmail: 'author@posts.com' })
       .expect(400);
   });
 
-  it('POST /posts → 400 ao criar post sem authorEmail', async () => {
+  it('POST /posts → 400 when authorEmail is missing', async () => {
     await request(app.getHttpServer())
       .post('/posts')
       .send({ title: 'No author' })
       .expect(400);
   });
 
-  it('POST /posts → 400 com campo extra (forbidNonWhitelisted)', async () => {
+  it('POST /posts → 400 with unknown field (forbidNonWhitelisted)', async () => {
     await request(app.getHttpServer())
       .post('/posts')
       .send({
@@ -318,7 +316,7 @@ describe('Posts CRUD (e2e)', () => {
 
   // ─── LIST ─────────────────────────────────────────────────────────────────
 
-  it('GET /posts → 200 retorna lista de posts', async () => {
+  it('GET /posts → 200 returns a list of posts', async () => {
     const res = await request(app.getHttpServer()).get('/posts').expect(200);
 
     expect(Array.isArray(res.body)).toBe(true);
@@ -331,7 +329,7 @@ describe('Posts CRUD (e2e)', () => {
 
   // ─── FIND ONE ─────────────────────────────────────────────────────────────
 
-  it('GET /posts/:id → 200 retorna post por id', async () => {
+  it('GET /posts/:id → 200 returns a post by id', async () => {
     const res = await request(app.getHttpServer())
       .get(`/posts/${createdPostId}`)
       .expect(200);
@@ -343,17 +341,17 @@ describe('Posts CRUD (e2e)', () => {
     });
   });
 
-  it('GET /posts/:id → 404 para id inexistente', async () => {
+  it('GET /posts/:id → 404 when post does not exist', async () => {
     await request(app.getHttpServer()).get('/posts/999999').expect(404);
   });
 
-  it('GET /posts/:id → 400 para id não-numérico', async () => {
+  it('GET /posts/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer()).get('/posts/abc').expect(400);
   });
 
   // ─── UPDATE ───────────────────────────────────────────────────────────────
 
-  it('PATCH /posts/:id → 200 atualiza título do post', async () => {
+  it('PATCH /posts/:id → 200 updates post title', async () => {
     const res = await request(app.getHttpServer())
       .patch(`/posts/${createdPostId}`)
       .send({ title: 'Updated title' })
@@ -362,7 +360,7 @@ describe('Posts CRUD (e2e)', () => {
     expect(res.body.title).toBe('Updated title');
   });
 
-  it('PATCH /posts/:id → 200 atualiza autor do post via email', async () => {
+  it('PATCH /posts/:id → 200 updates post author via email', async () => {
     const newAuthor = await prisma.user.create({
       data: { name: 'New Author', email: 'newauthor@posts.com', admin: false },
     });
@@ -380,21 +378,21 @@ describe('Posts CRUD (e2e)', () => {
     await prisma.user.delete({ where: { id: newAuthor.id } });
   });
 
-  it('PATCH /posts/:id → 404 para id inexistente', async () => {
+  it('PATCH /posts/:id → 404 when post does not exist', async () => {
     await request(app.getHttpServer())
       .patch('/posts/999999')
       .send({ title: 'Ghost' })
       .expect(404);
   });
 
-  it('PATCH /posts/:id → 404 ao atualizar autor para email inexistente', async () => {
+  it('PATCH /posts/:id → 404 when updating author to non-existent email', async () => {
     await request(app.getHttpServer())
       .patch(`/posts/${createdPostId}`)
       .send({ authorEmail: 'nobody@nowhere.com' })
       .expect(404);
   });
 
-  it('PATCH /posts/:id → 400 para id não-numérico', async () => {
+  it('PATCH /posts/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer())
       .patch('/posts/abc')
       .send({ title: 'X' })
@@ -403,7 +401,7 @@ describe('Posts CRUD (e2e)', () => {
 
   // ─── DELETE ───────────────────────────────────────────────────────────────
 
-  it('DELETE /posts/:id → 200 remove o post', async () => {
+  it('DELETE /posts/:id → 200 removes the post', async () => {
     const res = await request(app.getHttpServer())
       .delete(`/posts/${createdPostId}`)
       .expect(200);
@@ -411,17 +409,17 @@ describe('Posts CRUD (e2e)', () => {
     expect(res.body.id).toBe(createdPostId);
   });
 
-  it('DELETE /posts/:id → 404 para id inexistente', async () => {
+  it('DELETE /posts/:id → 404 when post does not exist', async () => {
     await request(app.getHttpServer()).delete('/posts/999999').expect(404);
   });
 
-  it('DELETE /posts/:id → 400 para id não-numérico', async () => {
+  it('DELETE /posts/:id → 400 when id is not a number', async () => {
     await request(app.getHttpServer()).delete('/posts/abc').expect(400);
   });
 
   // ─── CASCADE DELETE ───────────────────────────────────────────────────────
 
-  it('DELETE /users/:id → 200 remove usuário e seus posts em cascata', async () => {
+  it('DELETE /users/:id → 200 cascade deletes user posts', async () => {
     const userRes = await request(app.getHttpServer())
       .post('/users')
       .send({ name: 'Cascade User', email: 'cascade@test.com', admin: false })

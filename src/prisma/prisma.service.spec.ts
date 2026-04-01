@@ -12,7 +12,7 @@ describe('PrismaService', () => {
 
     service = module.get<PrismaService>(PrismaService);
 
-    // Mock métodos do PrismaClient
+    // Mock PrismaClient methods
     service.$connect = jest.fn().mockResolvedValue(undefined);
     service.$on = jest.fn();
   });
@@ -40,7 +40,7 @@ describe('PrismaService', () => {
       expect.any(Function),
     );
 
-    // Simula o evento beforeExit
+    // Simulate the beforeExit event
     await beforeExitCallback();
     expect(mockApp.close).toHaveBeenCalled();
   });

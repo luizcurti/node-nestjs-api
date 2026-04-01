@@ -171,9 +171,13 @@ npm run test:cov
 
 # Run tests in watch mode
 npm run test:watch
+
+# Run end-to-end tests (requires PostgreSQL running)
+npm run test:e2e
 ```
 
-**47 tests** across 8 test suites covering controllers, services, and repositories.
+**51 unit tests** across 8 test suites covering controllers, services, and repositories.
+**36 e2e tests** covering all CRUD routes — happy paths, validation errors, 404s, cascade delete, and `ParseIntPipe` guard (non-numeric IDs).
 
 ## Linting & Formatting
 
@@ -241,3 +245,4 @@ npm run format
 | `npm run test` | Run unit tests |
 | `npm run test:cov` | Run tests with coverage |
 | `npm run test:watch` | Run tests in watch mode |
+| `npm run test:e2e` | Run end-to-end tests against a real DB |
