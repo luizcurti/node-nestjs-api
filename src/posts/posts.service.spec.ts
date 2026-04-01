@@ -70,16 +70,36 @@ describe('PostsService', () => {
 
   it('should call repository.update on update', async () => {
     const dto: UpdatePostDto = { title: 't', authorEmail: 'a@a.com' };
+    const existing = { id: 1 };
     const result = { id: 1 };
+    repository.findOne.mockResolvedValue(existing as any);
     repository.update.mockResolvedValue(result as any);
     await expect(service.update(1, dto)).resolves.toBe(result);
+    expect(repository.findOne).toHaveBeenCalledWith(1);
     expect(repository.update).toHaveBeenCalledWith(1, dto);
   });
 
+  it('should throw NotFoundError when updating non-existent post', async () => {
+    repository.findOne.mockResolvedValue(null);
+    await expect(service.update(999, { title: 'x' })).rejects.toThrow(
+      NotFoundError,
+    );
+    expect(repository.update).not.toHaveBeenCalled();
+  });
+
   it('should call repository.remove on remove', async () => {
+    const existing = { id: 1 };
     const result = { id: 1 };
+    repository.findOne.mockResolvedValue(existing as any);
     repository.remove.mockResolvedValue(result as any);
     await expect(service.remove(1)).resolves.toBe(result);
+    expect(repository.findOne).toHaveBeenCalledWith(1);
     expect(repository.remove).toHaveBeenCalledWith(1);
+  });
+
+  it('should throw NotFoundError when removing non-existent post', async () => {
+    repository.findOne.mockResolvedValue(null);
+    await expect(service.remove(999)).rejects.toThrow(NotFoundError);
+    expect(repository.remove).not.toHaveBeenCalled();
   });
 });

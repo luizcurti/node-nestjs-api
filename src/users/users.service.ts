@@ -27,11 +27,13 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    await this.findOne(id);
     return this.repository.update(id, updateUserDto);
   }
 
-  remove(id: number) {
+  async remove(id: number): Promise<UserEntity> {
+    await this.findOne(id);
     return this.repository.remove(id);
   }
 }

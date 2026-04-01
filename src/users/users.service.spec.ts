@@ -19,6 +19,7 @@ describe('UsersService', () => {
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
@@ -95,6 +96,13 @@ describe('UsersService', () => {
 
   it('should update a user', async () => {
     const dto: UpdateUserDto = { name: 'Jane' };
+    const existingUser: UserEntity = {
+      id: 1,
+      name: 'John',
+      email: 'john@example.com',
+      admin: false,
+      createdAt: new Date(),
+    };
     const updatedUser: UserEntity = {
       id: 1,
       name: 'Jane',
@@ -102,11 +110,21 @@ describe('UsersService', () => {
       admin: false,
       createdAt: new Date(),
     };
+    mockRepository.findOne.mockResolvedValue(existingUser);
     mockRepository.update.mockResolvedValue(updatedUser);
 
     const result = await service.update(1, dto);
     expect(result).toEqual(updatedUser);
+    expect(repository.findOne).toHaveBeenCalledWith(1);
     expect(repository.update).toHaveBeenCalledWith(1, dto);
+  });
+
+  it('should throw NotFoundError when updating non-existent user', async () => {
+    mockRepository.findOne.mockResolvedValue(null);
+    await expect(service.update(999, { name: 'X' })).rejects.toThrow(
+      NotFoundError,
+    );
+    expect(repository.update).not.toHaveBeenCalled();
   });
 
   it('should remove a user', async () => {
@@ -117,10 +135,18 @@ describe('UsersService', () => {
       admin: false,
       createdAt: new Date(),
     };
+    mockRepository.findOne.mockResolvedValue(deletedUser);
     mockRepository.remove.mockResolvedValue(deletedUser);
 
     const result = await service.remove(1);
     expect(result).toEqual(deletedUser);
+    expect(repository.findOne).toHaveBeenCalledWith(1);
     expect(repository.remove).toHaveBeenCalledWith(1);
+  });
+
+  it('should throw NotFoundError when removing non-existent user', async () => {
+    mockRepository.findOne.mockResolvedValue(null);
+    await expect(service.remove(999)).rejects.toThrow(NotFoundError);
+    expect(repository.remove).not.toHaveBeenCalled();
   });
 });

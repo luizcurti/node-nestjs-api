@@ -3,7 +3,7 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { catchError, Observable } from 'rxjs';
 import { DatabaseError } from '../types/DatabaseError';
@@ -19,7 +19,7 @@ export class DatabaseInterceptor implements NestInterceptor {
           error = handleDatabaseErrors(error);
         }
         if (error instanceof DatabaseError) {
-          throw new BadRequestException(error.message);
+          throw new InternalServerErrorException(error.message);
         } else {
           throw error;
         }

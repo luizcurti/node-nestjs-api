@@ -8,4 +8,5 @@ export class PostEntity implements Post {
   createdAt: Date;
   updatedAt: Date;
   authorId: number;
+  author?: { name: string; email?: string };
 }

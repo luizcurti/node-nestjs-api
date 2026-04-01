@@ -27,11 +27,13 @@ export class PostsService {
     return post;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: number, updatePostDto: UpdatePostDto): Promise<PostEntity> {
+    await this.findOne(id);
     return this.repository.update(id, updatePostDto);
   }
 
-  remove(id: number) {
+  async remove(id: number): Promise<PostEntity> {
+    await this.findOne(id);
     return this.repository.remove(id);
   }
 }

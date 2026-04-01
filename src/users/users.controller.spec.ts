@@ -84,7 +84,7 @@ describe('UsersController', () => {
     };
     mockUsersService.findOne.mockResolvedValue(user);
 
-    const result = await controller.findOne('1');
+    const result = await controller.findOne(1);
     expect(result).toEqual(user);
     expect(service.findOne).toHaveBeenCalledWith(1);
   });
@@ -100,7 +100,7 @@ describe('UsersController', () => {
     };
     mockUsersService.update.mockResolvedValue(updatedUser);
 
-    const result = await controller.update('1', dto);
+    const result = await controller.update(1, dto);
     expect(result).toEqual(updatedUser);
     expect(service.update).toHaveBeenCalledWith(1, dto);
   });
@@ -115,7 +115,7 @@ describe('UsersController', () => {
     };
     mockUsersService.remove.mockResolvedValue(deletedUser);
 
-    const result = await controller.remove('1');
+    const result = await controller.remove(1);
     expect(result).toEqual(deletedUser);
     expect(service.remove).toHaveBeenCalledWith(1);
   });
@@ -125,7 +125,7 @@ describe('UsersController', () => {
       new NotFoundError('User not found.'),
     );
 
-    await expect(controller.findOne('999')).rejects.toThrow(NotFoundError);
+    await expect(controller.findOne(999)).rejects.toThrow(NotFoundError);
     expect(service.findOne).toHaveBeenCalledWith(999);
   });
 });

@@ -52,18 +52,18 @@ describe('PostsController', () => {
   });
 
   it('should return a post by id', () => {
-    expect(controller.findOne('1')).toEqual({ id: 1, title: 'Post 1' });
+    expect(controller.findOne(1)).toEqual({ id: 1, title: 'Post 1' });
     expect(service.findOne).toHaveBeenCalledWith(1);
   });
 
   it('should update a post', () => {
     const dto: UpdatePostDto = { title: 'Updated Post' };
-    expect(controller.update('1', dto)).toEqual({ id: 1, ...dto });
+    expect(controller.update(1, dto)).toEqual({ id: 1, ...dto });
     expect(service.update).toHaveBeenCalledWith(1, dto);
   });
 
   it('should remove a post', () => {
-    expect(controller.remove('1')).toEqual({ deleted: true });
+    expect(controller.remove(1)).toEqual({ deleted: true });
     expect(service.remove).toHaveBeenCalledWith(1);
   });
 });
